@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<h1>
+  <span style="color: #FF4500;">OpenAgenticUI</span>
+</h1>
 
-## Getting Started
+Free, open-source, and production-ready React and Next.js UI components built specifically for AI agents, tool calling, and human-in-the-loop workflows. Powered by TypeScript, Tailwind CSS, and Lucide icons.
 
-First, run the development server:
+<p align="left">
+  <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License" />
+  <img src="https://img.shields.io/badge/Next.js-16-black?logo=next.js" alt="Next.js 16" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-v4-38bdf8?logo=tailwindcss" alt="Tailwind CSS v4" />
+  <img src="https://img.shields.io/badge/TypeScript-Ready-3178C6?logo=typescript" alt="TypeScript" />
+</p>
+
+## Why OpenAgenticUI?
+
+Most component libraries provide static buttons and cards. When building AI agents, developers need specialized interfaces for streaming reasoning steps, inspecting tool calls, handling human approval gates, and tracking token budgets.
+
+**OpenAgenticUI** provides copy-pasteable, standalone `.tsx` components designed for modern AI-powered applications.
+
+It also includes a built-in **Copy for AI Agent** bundler that packages component code and integration instructions for AI coding tools such as Cursor, Claude Code, and Gemini CLI.
+
+## Quick Start
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/satyamyaduvanshi/openagenticui.git
+cd openagenticui
+```
+
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Start the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 4. Explore the components
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open the following URL in your browser:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```text
+http://localhost:3000/components
+```
 
-## Learn More
+## Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+- **Framework:** Next.js 16 with App Router
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS v4
+- **Icons:** Lucide React and custom SVG
+- **Architecture:** Standalone, copy-pasteable React components
+- **Theme:** Minimal paper-inspired design with dark ink (`#171717`) and orange accents (`#FF4500`)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **AI-native UI components** for agent workflows and tool calling.
+- **Human-in-the-loop interactions** for approvals and user decisions.
+- **Streaming interfaces** for real-time agent activity and execution updates.
+- **Copy for AI Agent** bundler for sharing component code and integration instructions.
+- **Developer-friendly integration** with React, Next.js, TypeScript, and Tailwind CSS.
 
-## Deploy on Vercel
+## Author
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Satyam Yadav**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+
+OpenAgenticUI is distributed under the **MIT License**. See the [`LICENSE`](LICENSE) file for details.
