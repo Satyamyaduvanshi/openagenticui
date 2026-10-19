@@ -126,7 +126,7 @@ export const DocsRightSidebar = memo(function DocsRightSidebar({ items }: { item
         <h2 className="relative isolate mt-1 inline-block font-editorial text-[19px] leading-none text-zinc-900">
           <span
             aria-hidden="true"
-            className="toc-marker absolute -inset-x-1 bottom-0 -z-10 h-2 rounded-sm bg-amber-300/60"
+            className="toc-marker absolute -inset-x-1 bottom-0 -z-10 h-2 rounded-sm bg-sky-300/60"
           />
           page
         </h2>
@@ -173,7 +173,7 @@ export const DocsRightSidebar = memo(function DocsRightSidebar({ items }: { item
                     </span>
                     <span
                       className={cn(
-                        "mt-0.5 block whitespace-pre-line text-[12px] leading-snug transition-colors duration-300",
+                        "mt-0.5 block whitespace-pre-line text-[10px] leading-snug transition-colors duration-300",
                         active ? "text-zinc-500" : "text-zinc-400"
                       )}
                     >
@@ -187,7 +187,7 @@ export const DocsRightSidebar = memo(function DocsRightSidebar({ items }: { item
         </nav>
       </div>
 
-      {/* sponsor + credit */}
+     
       <div className="mt-auto space-y-4 pt-8">
         <a
           href={SPONSOR_URL}
@@ -212,7 +212,7 @@ export const DocsRightSidebar = memo(function DocsRightSidebar({ items }: { item
             Your logo here
           </div>
 
-          <p className="mt-3 text-[12px] leading-snug text-zinc-500">
+          <p className="mt-3 text-[11px] leading-snug text-zinc-500">
             Sponsor the project and your logo and link show up right here, on every page.
           </p>
         </a>

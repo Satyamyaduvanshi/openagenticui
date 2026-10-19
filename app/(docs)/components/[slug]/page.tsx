@@ -1,5 +1,6 @@
 // app/(docs)/components/[slug]/page.tsx
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
@@ -16,6 +17,9 @@ type PageProps = { params: Promise<{ slug: string }> };
 
 const findItem = (slug: string) => REGISTRY.find((entry) => entry.slug === slug);
 
+const PANEL =
+  "mb-3 min-w-0 flex-1 rounded-3xl bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04),0_18px_50px_-30px_rgba(0,0,0,0.2)]";
+
 export function generateStaticParams() {
   return REGISTRY.map((item) => ({ slug: item.slug }));
 }
@@ -26,7 +30,35 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return item ? { title: item.name, description: item.description } : {};
 }
 
-export default async function ComponentSlugPage({ params }: PageProps) {
+/* ------------------------------------------------------------------ */
+/*  Instant shell: everything that does NOT need the URL renders        */
+/*  immediately; everything that does is streamed inside <Suspense>.    */
+/* ------------------------------------------------------------------ */
+
+export default function ComponentSlugPage({ params }: PageProps) {
+  return (
+    <div className="min-h-screen bg-[#F5F5F4] text-[#171717]">
+      <DocsNavbar />
+
+      <div className="flex">
+        {/* usePathname() reads the URL, so the sidebar gets its own boundary */}
+        <Suspense fallback={<aside aria-hidden="true" className="hidden w-72 shrink-0 md:block lg:w-80" />}>
+          <DocsLeftSidebar />
+        </Suspense>
+
+        <Suspense fallback={<ContentSkeleton />}>
+          <ComponentContent params={params} />
+        </Suspense>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Dynamic part (awaits params)                                        */
+/* ------------------------------------------------------------------ */
+
+async function ComponentContent({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const item = findItem(slug);
   if (!item) return notFound();
@@ -34,14 +66,9 @@ export default async function ComponentSlugPage({ params }: PageProps) {
   const sourceCode = getComponentSourceCode(item.slug);
 
   return (
-    <div className="min-h-screen bg-[#F5F5F4] text-[#171717]">
-      <DocsNavbar />
-
-      <div className="flex">
-        <DocsLeftSidebar />
-
-        {/* floating panel (no border — separation comes from the soft page background) */}
-        <main className="mb-3 min-w-0 flex-1 rounded-3xl bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04),0_18px_50px_-30px_rgba(0,0,0,0.2)]">
+    <>
+      {/* floating panel (no border — separation comes from the soft page background) */}
+      <main className={PANEL}>
         <div className="mx-auto w-full max-w-5xl space-y-10 px-5 py-10 sm:px-8 lg:px-12 lg:py-14">
           {/* INTRO — title only; Preview / Setup / copy actions all live inside ComponentViewer */}
           <div id="intro" className="relative isolate scroll-mt-24 space-y-5">
@@ -75,16 +102,35 @@ export default async function ComponentSlugPage({ params }: PageProps) {
 
           <ComponentViewer item={item} sourceCode={sourceCode} />
         </div>
-        </main>
+      </main>
 
-        <DocsRightSidebar
-          items={[
-            { id: "intro", title: "Short intro", subtitle: "What it does & how to use it" },
-            { id: "preview", title: "Preview", subtitle: "Live component demo" },
-            { id: "setup", title: "Setup", subtitle: `Install & source code\n${item.filePath}` },
-          ]}
-        />
-      </div>
-    </div>
+      <DocsRightSidebar
+        items={[
+          { id: "intro", title: "Short intro", subtitle: "What it does & how to use it" },
+          { id: "preview", title: "Preview", subtitle: "Live component demo" },
+          { id: "setup", title: "Setup", subtitle: `Install & source code\n${item.filePath}` },
+        ]}
+      />
+    </>
+  );
+}
+
+
+function ContentSkeleton() {
+  return (
+    <>
+      <main className={PANEL} aria-busy="true">
+        <div className="mx-auto w-full max-w-5xl space-y-8 px-5 py-10 sm:px-8 lg:px-12 lg:py-14">
+          <div className="space-y-5">
+            <div className="h-3 w-44 animate-pulse rounded-full bg-zinc-100" />
+            <div className="h-12 w-2/3 animate-pulse rounded-xl bg-zinc-100" />
+            <div className="h-4 w-full max-w-xl animate-pulse rounded-full bg-zinc-100" />
+          </div>
+          <div className="h-[380px] animate-pulse rounded-2xl bg-zinc-50" />
+          <div className="h-64 animate-pulse rounded-2xl bg-zinc-50" />
+        </div>
+      </main>
+      <aside aria-hidden="true" className="hidden w-80 shrink-0 xl:block" />
+    </>
   );
 }

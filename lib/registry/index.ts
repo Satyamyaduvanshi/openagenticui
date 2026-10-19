@@ -8,7 +8,9 @@ export interface RegistryItem {
   aiIntegrationSteps: string;
 }
 
-export const REGISTRY: RegistryItem[] = [
+// 1. Explicitly type the array literal here so TypeScript knows 
+// 'category' must match the strict union type.
+const ITEMS: RegistryItem[] = [
   {
     slug: "agent-terminal",
     name: "Agent Terminal Stream",
@@ -59,7 +61,10 @@ export const REGISTRY: RegistryItem[] = [
     aiIntegrationSteps:
       "Map `message.toolInvocations` to `<ToolCallCard />` and pass `toolName`, `args`, and `result`.",
   },
-].sort((a, b) => a.name.localeCompare(b.name));
+];
+
+// 2. Sort the strictly-typed array and export it
+export const REGISTRY: RegistryItem[] = ITEMS.sort((a, b) => a.name.localeCompare(b.name));
 
 export function getGroupedCategories() {
   const groups = new Map<string, { name: string; items: RegistryItem[]; hasNew: boolean }>();
@@ -77,7 +82,8 @@ export function buildAIPrompt(item: RegistryItem, rawSourceCode: string): string
 
 Integrate the standalone **${item.name}** component into my project.
 - Architecture: 100% Standalone React + Tailwind CSS (Light Theme, #FF4500 accent). Do NOT install shadcn/ui or Radix.
-- Required packages: \`npm install lucide-react clsx tailwind-merge\`
+- Required packages: 
+\`npm install lucide-react clsx tailwind-merge\`
 
 ## 1. Create \`${item.filePath}\`
 \`\`\`tsx

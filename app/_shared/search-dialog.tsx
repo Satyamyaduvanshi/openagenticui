@@ -20,7 +20,7 @@ const TINTS = [
   "bg-rose-50 text-rose-700",
 ] as const;
 
-const CATEGORY_LIST = Array.from(new Set(REGISTRY.map((i) => i.category)));
+const CATEGORY_LIST: string[] = Array.from(new Set(REGISTRY.map((i) => i.category)));
 const tintFor = (category: string) => TINTS[Math.max(0, CATEGORY_LIST.indexOf(category)) % TINTS.length];
 
 // Pre-lowercased haystacks so typing never re-lowercases the whole registry.

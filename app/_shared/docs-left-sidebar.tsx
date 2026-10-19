@@ -13,14 +13,11 @@ import { REACH_URL, SPONSOR_URL } from "@/app/_shared/links";
 // Computed once at module load; route changes never re-run grouping.
 const CATEGORIES = getGroupedCategories();
 
-// Static data, created once (no per-render allocations).
-// Both icons come from the same icon set => same grid, same stroke, same optical size.
 const GETTING_STARTED: ReadonlyArray<{ href: string; label: string; Icon: LucideIcon }> = [
   { href: "/", label: "Home", Icon: House },
   { href: "/components", label: "All components", Icon: LayoutGrid },
 ];
 
-// The scrollbar is invisible until you hover the sidebar, then it fades in as a slim rounded pill.
 const SCROLL_CSS = `
 .sb-scroll::-webkit-scrollbar { width: 10px; }
 .sb-scroll::-webkit-scrollbar-track { background: transparent; }
@@ -53,30 +50,28 @@ const NavLink = memo(function NavLink({
       href={href}
       aria-current={active ? "page" : undefined}
       className={cn(
-        // fixed height + items-center => icon and text share the same center line
-        "group -mx-2.5 flex h-8 items-center gap-2.5 rounded-lg px-2.5 transition-all duration-200 ease-out",
+        "group -mx-2.5 flex h-8 items-center gap-2.5 rounded-lg px-2.5 transition-colors duration-200",
         active
-          ? "bg-white font-semibold text-zinc-900 shadow-[0_1px_2px_rgba(0,0,0,0.06)]"
-          : "font-normal text-zinc-500 hover:bg-white/70 hover:text-zinc-800"
+          ? "font-medium text-zinc-900" // Shade 3 (Active)
+          : "font-normal text-zinc-500 hover:text-zinc-700" // Shade 1 (Normal) -> Shade 2 (Hover)
       )}
     >
-      {/* Fixed 16x16 slot + 16px line-height label => identical heights, centered together */}
       <Icon
         size={16}
         strokeWidth={1.75}
         aria-hidden="true"
         className={cn(
-          "shrink-0 transition-transform duration-200 group-hover:scale-105",
-          active ? "text-zinc-900" : "text-zinc-400 group-hover:text-zinc-700"
+          "shrink-0 transition-colors duration-200",
+          active ? "text-zinc-900" : "text-zinc-400 group-hover:text-zinc-600"
         )}
       />
-      <span className="truncate text-[13.5px] leading-4">{label}</span>
+      <span className="truncate text-[13px] leading-4">{label}</span>
     </Link>
   );
 });
 
 const SectionLabel = ({ children }: { children: React.ReactNode }) => (
-  <div className="font-mono text-[10.5px] font-medium uppercase tracking-[0.14em] text-zinc-400/75">
+  <div className="font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-zinc-400/80">
     {children}
   </div>
 );
@@ -87,14 +82,22 @@ export const DocsLeftSidebar = memo(function DocsLeftSidebar() {
   return (
     <aside className="sticky top-14 hidden h-[calc(100dvh-3.5rem)] w-72 shrink-0 flex-col justify-between select-none md:flex lg:w-80">
       <style>{SCROLL_CSS}</style>
-      {/* Scrollable navigation */}
+
+      {/* Scrollable navigation container */}
       <div className="sb-scroll flex-1 space-y-7 overflow-y-auto overscroll-contain px-6 py-6 lg:px-7">
+        
         {/* GETTING STARTED */}
         <div>
           <SectionLabel>Getting Started</SectionLabel>
           <nav aria-label="Getting started" className="mt-3 space-y-0.5">
             {GETTING_STARTED.map(({ href, label, Icon }) => (
-              <NavLink key={href} href={href} label={label} Icon={Icon} active={pathname === href} />
+              <NavLink
+                key={href}
+                href={href}
+                label={label}
+                Icon={Icon}
+                active={pathname === href}
+              />
             ))}
           </nav>
         </div>
@@ -106,14 +109,14 @@ export const DocsLeftSidebar = memo(function DocsLeftSidebar() {
           <div className="mt-3.5 space-y-6">
             {CATEGORIES.map((cat) => (
               <div key={cat.name}>
-                <div className="flex items-center justify-between text-[13.5px] font-medium text-zinc-500">
+                <div className="flex items-center justify-between text-[12px] font-medium text-zinc-500">
                   <span>{cat.name}</span>
-                  <span className="font-mono text-[11px] font-normal text-zinc-300/90">
+                  <span className="font-mono text-[11px] font-normal text-zinc-400">
                     {cat.items.length}
                   </span>
                 </div>
 
-                <ul className="mt-2 space-y-0.5">
+                <ul className="mt-2 ml-1 space-y-0.5 border-l border-zinc-200/80 pl-3.5">
                   {cat.items.map((item) => {
                     const href = `/components/${item.slug}`;
                     const active = pathname === href;
@@ -124,10 +127,10 @@ export const DocsLeftSidebar = memo(function DocsLeftSidebar() {
                           href={href}
                           aria-current={active ? "page" : undefined}
                           className={cn(
-                            "-mx-2.5 block rounded-lg px-2.5 py-1.5 text-[13px] leading-snug transition-all duration-200 ease-out",
+                            "-mx-2 block rounded-lg px-2 py-1.5 text-[12px] leading-snug transition-colors duration-200",
                             active
-                              ? "bg-white font-semibold text-zinc-900 shadow-[0_1px_2px_rgba(0,0,0,0.06)]"
-                              : "font-normal text-zinc-500 hover:bg-white/70 hover:text-zinc-800"
+                              ? "font-medium text-zinc-900" // Shade 3 (Active)
+                              : "font-normal text-zinc-500 hover:text-zinc-700" // Shade 1 (Normal) -> Shade 2 (Hover)
                           )}
                         >
                           {item.name}
@@ -142,14 +145,24 @@ export const DocsLeftSidebar = memo(function DocsLeftSidebar() {
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="space-y-3.5 px-6 pb-5 pt-3 text-[12px] lg:px-7">
+      {/* FOOTER */}
+      <div className="space-y-3.5 px-6 pb-5 pt-3 lg:px-7">
         <div className="space-y-1.5">
-          <p className="leading-relaxed text-zinc-600">
-            Yours to use at home or at work. MIT licensed, no attribution needed.
+          <p className="text-[11px] leading-relaxed text-zinc-600">
+            Yours to use at home or at work.{" "}
+            <a
+              href="https://github.com/Satyamyaduvanshi/openagenticui/blob/main/LICENSE"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="text-blue-600 transition-colors hover:text-blue-700"
+            >
+              MIT licensed
+            </a>{" "}
+            <br /> no attribution needed.
           </p>
-          <p className="leading-relaxed text-zinc-400">
-            Made by hand, one component at a time. If it saves you an afternoon, I&apos;d love to hear about it.
+          <p className="text-[10px] leading-relaxed text-zinc-400">
+            Made by hand, one component at a time. If it saves you an afternoon, I&apos;d love to
+            hear about it.
           </p>
         </div>
 
@@ -169,12 +182,15 @@ export const DocsLeftSidebar = memo(function DocsLeftSidebar() {
             rel="noreferrer noopener"
             className="group inline-flex h-9 items-center justify-center gap-1.5 rounded-xl bg-[#262626] text-[12px] font-medium text-white shadow-sm transition-all duration-200 hover:bg-zinc-800 active:scale-[0.98]"
           >
-            <Heart aria-hidden="true" className="size-3.5 transition-all duration-200 group-hover:fill-current" />
+            <Heart
+              aria-hidden="true"
+              className="size-3.5 transition-all duration-200 group-hover:fill-current"
+            />
             Sponsor us
           </a>
         </div>
 
-        <div className="text-[11px] text-zinc-400/80">© 2026 {SITE_CONFIG.name}</div>
+        <div className="text-[10px] text-zinc-400/80">© 2026 {SITE_CONFIG.name}</div>
       </div>
     </aside>
   );

@@ -23,9 +23,9 @@ const TINTS = [
   "bg-rose-50 text-rose-700 ring-rose-100",
 ] as const;
 
-const CATEGORIES = Array.from(new Set(REGISTRY.map((i) => i.category)));
-const TINT_BY_CATEGORY = new Map(CATEGORIES.map((c, i) => [c, TINTS[i % TINTS.length]]));
-const COUNT_BY_CATEGORY = new Map(
+const CATEGORIES: string[] = Array.from(new Set(REGISTRY.map((i) => i.category)));
+const TINT_BY_CATEGORY = new Map<string, string>(CATEGORIES.map((c, i) => [c, TINTS[i % TINTS.length]]));
+const COUNT_BY_CATEGORY = new Map<string, number>(
   CATEGORIES.map((c) => [c, REGISTRY.filter((i) => i.category === c).length])
 );
 
