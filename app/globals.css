@@ -1,26 +1,62 @@
+/* app/globals.css */
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --brand: #FF4500;
+  --ink: #171717;
+  --muted: #737373;
+  --hairline: #EBEBEB;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  color-scheme: light only;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #FFFFFF;
+  color: #171717;
+}
+
+.font-editorial {
+  font-family: var(--font-serif), Georgia, serif;
+  letter-spacing: -0.02em;
+}
+
+.font-mono-code {
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* Always-enabled, ultra-light scrollbar for the left sidebar */
+.sidebar-scroll {
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: #E4E4E7 #FFFFFF;
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: #FFFFFF;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background-color: #E4E4E7;
+  border-radius: 9999px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: #D4D4D8;
+}
+
+.your-container {
+  scrollbar-width: none;          /* Hides scrollbar in Firefox */
+  -ms-overflow-style: none;       /* Hides scrollbar in IE and Edge */
+}
+
+.your-container::-webkit-scrollbar {
+  display: none;                  /* Hides scrollbar in Chrome, Safari, and Opera */
 }
