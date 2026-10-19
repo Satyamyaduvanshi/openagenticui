@@ -17,7 +17,7 @@ const ITEMS: RegistryItem[] = [
     category: "Execution",
     isNew: true,
     description: "Light-mode sandboxed stdout/stderr log viewer for code-execution agents.",
-    filePath: "components/agentic/agent-terminal.tsx",
+    filePath: "components/execution/agent-terminal.tsx",
     aiIntegrationSteps:
       "Pass live stdout lines from your sandboxed runner or WebSocket stream into `logs` and set `isRunning` while the child process is active.",
   },
@@ -27,7 +27,7 @@ const ITEMS: RegistryItem[] = [
     category: "Telemetry",
     isNew: true,
     description: "Token utilization bar and real-time session cost badge with #FF4500 progress indicator.",
-    filePath: "components/agentic/context-window-meter.tsx",
+    filePath: "components/telemetry/context-window-meter.tsx",
     aiIntegrationSteps:
       "Connect `usedTokens` to `usage.totalTokens` returned from your AI SDK `onFinish` callback.",
   },
@@ -37,7 +37,7 @@ const ITEMS: RegistryItem[] = [
     category: "Safety & HITL",
     isNew: true,
     description: "Inline human-in-the-loop confirmation gate before an agent executes high-risk commands.",
-    filePath: "components/agentic/human-approval-gate.tsx",
+    filePath: "components/approvals/human-approval-gate.tsx",
     aiIntegrationSteps:
       "Render `<HumanApprovalGate />` when a tool call requires explicit confirmation before execution.",
   },
@@ -47,7 +47,7 @@ const ITEMS: RegistryItem[] = [
     category: "Reasoning",
     isNew: false,
     description: "Collapsible chain-of-thought streaming box with live second counter.",
-    filePath: "components/agentic/reasoning-trace.tsx",
+    filePath: "components/reasoning/reasoning-trace.tsx",
     aiIntegrationSteps:
       "Bind `content` to the streaming reasoning delta and set `isThinking={true}` until the final answer starts.",
   },
@@ -57,7 +57,7 @@ const ITEMS: RegistryItem[] = [
     category: "Tool Calling",
     isNew: true,
     description: "Collapsible function invocation inspector showing JSON arguments and return payloads.",
-    filePath: "components/agentic/tool-call-card.tsx",
+    filePath: "components/tool-calling/tool-call-card.tsx",
     aiIntegrationSteps:
       "Map `message.toolInvocations` to `<ToolCallCard />` and pass `toolName`, `args`, and `result`.",
   },

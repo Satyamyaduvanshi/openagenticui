@@ -1,15 +1,16 @@
 // app/_shared/component-viewer.tsx
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Sun, Moon } from "lucide-react";
 import { RegistryItem, REGISTRY, buildAIPrompt } from "@/lib/registry";
-import { ReasoningTrace } from "@/components/agentic/reasoning-trace";
-import { ToolCallCard } from "@/components/agentic/tool-call-card";
-import { HumanApprovalGate } from "@/components/agentic/human-approval-gate";
-import { AgentTerminal } from "@/components/agentic/agent-terminal";
-import { ContextWindowMeter } from "@/components/agentic/context-window-meter";
+import { ReasoningTrace } from "@/components/reasoning/reasoning-trace";
+import { ToolCallCard } from "@/components/tool-calling/tool-call-card";
+import { HumanApprovalGate } from "@/components/approvals/human-approval-gate";
+import { AgentTerminal } from "@/components/execution/agent-terminal";
+import { ContextWindowMeter } from "@/components/telemetry/context-window-meter";
+
 import { CodeBlock, InstallCommand } from "@/app/_shared/code-block";
 import { CopyForAIButton } from "@/app/_shared/copy-for-ai";
 
@@ -98,6 +99,7 @@ const inlineCode = "rounded bg-zinc-200/70 px-1.5 py-0.5 font-mono-code text-[11
 /* ---------------------------------- viewer --------------------------------- */
 
 export function ComponentViewer({ item, sourceCode }: { item: RegistryItem; sourceCode: string }) {
+  const [previewTheme, setPreviewTheme] = useState<"light" | "dark">("light");
   const currentIndex = REGISTRY.findIndex((i) => i.slug === item.slug);
   const prevItem = currentIndex > 0 ? REGISTRY[currentIndex - 1] : null;
   const nextItem = currentIndex < REGISTRY.length - 1 ? REGISTRY[currentIndex + 1] : null;
@@ -120,17 +122,48 @@ export default function Example() {
       <section id="preview" className="scroll-mt-24 space-y-4">
         <h2 className="font-editorial text-2xl text-zinc-900">Preview</h2>
 
-        <div className="relative flex min-h-[380px] items-center justify-center overflow-hidden rounded-2xl p-8 sm:p-14">
+        <div
+          className={`relative flex min-h-[380px] items-center justify-center overflow-hidden rounded-2xl  sm:p-14 transition-colors duration-300 ${
+            previewTheme === "dark" ? "dark border-white/5 bg-[#1c1c1c]" : "border-zinc-200 bg-white"
+          }`}
+        >
           {/* fine grid, faded toward the edges */}
           <div
             aria-hidden="true"
-            className="absolute inset-0 [background-image:linear-gradient(to_right,rgba(0,0,0,0.045)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.045)_1px,transparent_1px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_80%)]"
+            className={`absolute inset-0 [background-size:28px_28px] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_80%)] ${
+              previewTheme === "dark"
+                ? "[background-image:linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)]"
+                : "[background-image:linear-gradient(to_right,rgba(0,0,0,0.045)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.045)_1px,transparent_1px)]"
+            }`}
           />
 
-          <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono-code text-[10px] uppercase tracking-widest text-zinc-500">
-            <span aria-hidden="true" className="size-1.5 animate-pulse rounded-full bg-emerald-500" />
-            Live preview
-          </span>
+          <div className="absolute left-4 right-4 top-4 z-20 flex items-center justify-between">
+            <span
+              className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono-code text-[10px] uppercase tracking-widest ${
+                previewTheme === "dark" ? "text-zinc-500" : "text-zinc-400"
+              }`}
+            >
+              <span aria-hidden="true" className="size-1.5 animate-pulse rounded-full bg-emerald-500" />
+              Live preview
+            </span>
+
+            {/* Minimalist Theme Toggle */}
+            <button
+              onClick={() => setPreviewTheme(previewTheme === "light" ? "dark" : "light")}
+              aria-label="Toggle theme"
+              className={`flex size-8 items-center justify-center rounded-full border shadow-sm backdrop-blur-md transition-all duration-300 ${
+                previewTheme === "dark"
+                  ? "border-white/10 bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-zinc-100"
+                  : "border-zinc-200/50 bg-white/50 text-zinc-500 hover:bg-white hover:text-zinc-900"
+              }`}
+            >
+              {previewTheme === "light" ? (
+                <Moon className="size-[14px]" />
+              ) : (
+                <Sun className="size-[14px]" />
+              )}
+            </button>
+          </div>
 
           <div className="relative z-10 flex w-full justify-center">
             <Preview slug={item.slug} />
@@ -151,7 +184,6 @@ export default function Example() {
             Setup
           </h2>
 
-          {/* single AI action: logos rotate Claude → ChatGPT → Gemini → Cursor */}
           <CopyForAIButton
             getPrompt={() => buildAIPrompt(item, sourceCode)}
             label="Copy for AI Agent"
